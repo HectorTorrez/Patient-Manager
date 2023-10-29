@@ -1,16 +1,23 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Formulario, Header, PatientsList } from "./components"
 
 
 function App() {
 
-  const [patients, setPatients] = useState([])
+  const [patients, setPatients] = useState(()=>{
+    const localData = localStorage.getItem('patients')
+    return localData ? JSON.parse(localData) : []
+  })
   const [patient, setPatient] = useState({})
 
   const onDelete = (id) => {
     const patientsUpdate = patients.filter(pt => pt.id !== id)
     setPatients(patientsUpdate)
   }
+
+  useEffect(() => {
+    localStorage.setItem('patients', JSON.stringify(patients))
+  }, [patients])
 
   return (
     <div className='container mx-auto h-screen'>
